@@ -1,7 +1,6 @@
 package my_linked_list;
 
 import java.util.LinkedList;
-
 public class Test {
     static MyLinkedList<String> listEmail = new MyLinkedList<>();
     static {
