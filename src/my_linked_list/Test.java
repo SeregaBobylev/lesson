@@ -14,8 +14,6 @@ public class Test {
         System.out.println(listEmail.get(0));
         System.out.println(listEmail.remove("serega@mail.com"));
         System.out.println(listEmail.get(0));
-//        System.out.println(listEmail.get());
-
     }
 
 }
