@@ -6,7 +6,7 @@ public class MyLinkedList<E> {
     private Node<E> tail;
 
     public void add(E value) {
-        Node<E> newNode = new Node<E>(value, null);
+        Node<E> newNode = new Node<>(value, null);
         if (head == null) {
             head = newNode;
         } else {
@@ -20,75 +20,62 @@ public class MyLinkedList<E> {
         Node<E> tempList = head;
         for (int i = 0; i < size; i++) {
             if (tempList.value.equals(value)) return true;
-            if(tempList.next == null) return false;
             tempList = tempList.next;
         }
         return false;
     }
 
     public E get(int index) {
-        Node<E> current = head;
-        for (int i = 0; i < size; i++) {
-            if (index == i) return current.value;
-            current = current.next;
-        }
-        return null;
+        return getNodeByIndex(index).value;
     }
 
-    public boolean remove(E value) {
-        Node<E> previous = null, current = head;
-        for (int i = 0; i < size; i++) {
-            if (current.value == value) {
-                if (size == 1) {
-                    head = null;
-                    tail = null;
-                } else if (i == size - 1) {
-//                    ??????
-                } else if (i == 0) {
-                    head = current.next;
-                } else {
-                    previous.next = current.next;
-                    head = previous;
-                }
-                size--;
-                return true;
-            }
-            previous = current;
-            current = current.next;
+    public E remove(int index) {
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        E result = head.value;
+        if (index == 0) {
+            head = head.next;
+        } else {
+            Node<E> previous = getNodeByIndex(index - 1);
+            result = (E) previous.next.value;
+            previous.next = previous.next.next;
         }
-
-        return false;
+        size--;
+        return result;
     }
 
-    public boolean remove(int index) {
-        Node<E> previous = null, current = head;
-        if (index < 0 || index >= size) return false;
+    public E remove(E value) {
+        E result = head.value;
+        Node<E> node = head;
+        Node<E> previous = null;
         for (int i = 0; i < size; i++) {
-            if (i==index) {
-                if (size == 1) {
-                    head = null;
-                    tail = null;
-                } else if (i == size - 1) {
-//                    ??????
-                } else if (i == 0) {
-                    head = current.next;
+            if (node.value == value) {
+                if (i == 0) {
+                    head = head.next;
                 } else {
-                    previous.next = current.next;
-                    head = previous;
+                    result = (E) previous.next.value;
+                    previous.next = previous.next.next;
                 }
                 size--;
-                return true;
+                return result;
             }
-            previous = current;
-            current = current.next;
+            previous = node;
+            node = node.next;
         }
+        return result;
+    }
 
-        return false;
+    private Node<E> getNodeByIndex(int index) {
+        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        Node<E> node = head;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        return node;
     }
 
     private static class Node<E> {
         private E value;
-        public Node next;
+        public Node<E> next;
 
         private Node(E value, Node<E> next) {
             this.value = value;
