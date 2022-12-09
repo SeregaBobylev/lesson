@@ -12,8 +12,14 @@ public class Test {
     }
     public static void main(String[] args) {
         System.out.println(listEmail.get(0));
-        System.out.println(listEmail.remove("serega@mail.com"));
+        System.out.println(listEmail.remove(0));
+        System.out.println(listEmail.remove("oleg@mail.com"));
         System.out.println(listEmail.get(0));
+        System.out.println(listEmail.get(1));
+        System.out.println(listEmail.get(2));
+        System.out.println(listEmail.contains("andrey@mail.com"));
+        System.out.println(listEmail.contains("serega@mail.com"));
+
     }
 
 }
