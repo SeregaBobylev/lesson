@@ -26,8 +26,8 @@ public class MyStack<E> {
     }
 
     private static class Node<E>{
-        private E value;
-        private Node<E> lastNodes;
+        private final E value;
+        private final Node<E> lastNodes;
 
         public Node(E value, Node<E> lastNodes) {
             this.value = value;
