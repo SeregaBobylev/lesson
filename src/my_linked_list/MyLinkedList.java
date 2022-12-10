@@ -43,25 +43,23 @@ public class MyLinkedList<E> {
         return result;
     }
 
-    public E remove(E value) {
-        E result = head.value;
+    public boolean remove(E value) {
         Node<E> node = head;
         Node<E> previous = null;
         for (int i = 0; i < size; i++) {
-            if (node.value == value) {
+            if (node.value.equals(value)) {
                 if (i == 0) {
                     head = head.next;
                 } else {
-                    result = (E) previous.next.value;
                     previous.next = previous.next.next;
                 }
                 size--;
-                return result;
+                return true;
             }
             previous = node;
             node = node.next;
         }
-        return result;
+        return false;
     }
 
     private Node<E> getNodeByIndex(int index) {
