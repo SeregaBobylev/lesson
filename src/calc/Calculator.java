@@ -7,11 +7,12 @@ public class Calculator {
     private char[] current;
     private Stack<Character> convertStack;
 
-    public Calculator(char[] current) {
-        this.current = current;
-        Stack<Objects> stack = new Stack<>();
-        for(int i = 0; i<current.length-1;i++){
-
+    public Calculator(String current) {
+        Lexer temp = new Lexer(current);
+        System.out.println(temp);
+        while(temp.getNextToken.value!=null){
+            System.out.println(temp.getNextToken.value);
+            temp.getNextToken=temp.getNextToken.nextToken;
         }
     }
 }
