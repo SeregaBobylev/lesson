@@ -6,6 +6,9 @@ public class Token {
     public typeChar type;
     public Token next;
 
+    public Token() {
+    }
+
     public Token(String value, typeChar type, Token nextToken) {
         this.value = value;
         this.type = type;
