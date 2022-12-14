@@ -10,8 +10,8 @@ public class TokenType {
             symbolMap.put(i, Token.typeChar.NUMBER);
         symbolMap.put('-', Token.typeChar.MINUS);
         symbolMap.put('+', Token.typeChar.PLUS);
-        symbolMap.put('(', Token.typeChar.OPENBRACKET);
-        symbolMap.put(')', Token.typeChar.CLOSEBRACKET);
+        symbolMap.put('(', Token.typeChar.OPEN);
+        symbolMap.put(')', Token.typeChar.CLOSE);
         symbolMap.put('/', Token.typeChar.DIVISION);
         symbolMap.put('*', Token.typeChar.MULTIPLIED);
         symbolMap.put('^', Token.typeChar.DEGREE);

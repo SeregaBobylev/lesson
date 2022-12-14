@@ -1,14 +1,11 @@
 package calc;
 
 public class Token {
-    enum typeChar {PLUS,MINUS,NUMBER,DIVISION,MULTIPLIED,DEGREE,OPENBRACKET,CLOSEBRACKET};
+    enum typeChar {PLUS,MINUS,NUMBER,DIVISION,MULTIPLIED,DEGREE, OPEN, CLOSE};
     public String value;
     public typeChar type;
     public Token next;
-
-    public Token() {
-    }
-
+    public Token() {}
     public Token(String value, typeChar type, Token nextToken) {
         this.value = value;
         this.type = type;
