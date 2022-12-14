@@ -1,33 +1,46 @@
 package calc;
 
-import java.util.Stack;
+import javax.swing.*;
 
 public class Lexer {
-    Token getNextToken;
-    Token lookAhead;
-    public Lexer(String expression) {
-        String tempString = new String();
-        while(!expression.isEmpty()){
-            tempString += expression.charAt(0);
-            System.out.println(expression);
-            System.out.println();
-            if(TokenType.getType(expression.charAt(0)).equals(TokenType.getType(expression.charAt(1)))){
-                tempString+=expression.charAt(1);
-                continue;
-            }else{
-                if(getNextToken!=null){
-                    getNextToken.nextToken = getNextToken;
-                    getNextToken.value=tempString;
-                    getNextToken.type=TokenType.getType(expression.charAt(0));
-                }else
-                getNextToken = new Token(tempString,TokenType.getType(expression.charAt(0)),null);
-                tempString="";
-            }
+    private final String current;
+    private Token nextToken; // tail
 
-            expression.substring(1);
+    private Token lookAhead; //head
+
+    public Lexer(String expression) {
+        current = expression;
+        String tempString = "";
+        char lastChar= expression.charAt(0);
+        while (!expression.isEmpty()){
+            if (!TokenType.getType(expression.charAt(0)).equals(TokenType.getType(lastChar))) {
+                Token temp = new Token(tempString, TokenType.getType(lastChar), null);
+                if (lookAhead != null) {
+                    nextToken.next = temp;
+                } else
+                    lookAhead = temp;
+                nextToken = temp;
+                tempString = "";
+            }
+            tempString += expression.charAt(0);
+            lastChar = expression.charAt(0);
+            expression = expression.substring(1);
         }
+        Token temp = new Token(tempString, TokenType.getType(lastChar), null);
+        if (lookAhead != null) {
+            nextToken.next = temp;
+        } else
+            lookAhead = temp;
+        nextToken = temp;
+        tempString = "";
     }
-    public Token getGetNextToken() {
-        return getNextToken;
+    public Token getLookAhead() {
+        return lookAhead;
+    }
+    public Token getNextToken() {
+        return lookAhead.next;
+    }
+    public void shift(){
+        lookAhead = lookAhead.next;
     }
 }

@@ -1,6 +1,5 @@
 package calc;
 
-import java.util.Objects;
 import java.util.Stack;
 
 public class Calculator {
@@ -9,10 +8,13 @@ public class Calculator {
 
     public Calculator(String current) {
         Lexer temp = new Lexer(current);
-        System.out.println(temp);
-        while(temp.getNextToken.value!=null){
-            System.out.println(temp.getNextToken.value);
-            temp.getNextToken=temp.getNextToken.nextToken;
+        String newExpression = "";
+        Stack<Token.typeChar> symbol = new Stack<>();
+        while (temp.getLookAhead()!=null){
+
+            temp.shift();
         }
+
+
     }
 }
