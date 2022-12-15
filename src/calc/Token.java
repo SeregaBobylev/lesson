@@ -1,7 +1,6 @@
 package calc;
 
-public class Token {
-    enum typeChar {PLUS,MINUS,NUMBER,DIVISION,MULTIPLIED,DEGREE, OPEN, CLOSE};
+public class Token extends TokenType {
     public String value;
     public typeChar type;
     public Token next;

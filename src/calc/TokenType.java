@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TokenType {
+    enum typeChar {PLUS,MINUS,NUMBER,DIVISION,MULTIPLIED,DEGREE, OPEN, CLOSE};
     private static Map<Character,Token.typeChar> symbolMap = new HashMap<>();
     static {
         for(char i='0' ; i<='9'; i++)

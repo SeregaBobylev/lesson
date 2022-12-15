@@ -2,7 +2,8 @@ package calc;
 
 import java.util.Stack;
 
-import static calc.Token.typeChar.*;
+import static calc.TokenType.typeChar.*;
+
 
 public class Calculator {
     private char[] current;
@@ -91,6 +92,10 @@ public class Calculator {
         }
         while (!symbol.empty()) {
             setElement(new Token(null, symbol.pop(), null));
+        }
+        while (head!=null){
+            System.out.println(head.value);
+            head=head.next;
         }
         return head;
     }
