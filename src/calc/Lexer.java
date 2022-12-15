@@ -10,10 +10,14 @@ public class Lexer {
 
     public Lexer(String expression) {
         current = expression;
-        String tempString = "";
         char lastChar= expression.charAt(0);
+        String tempString =String.valueOf(expression.charAt(0));
+        Token tempToken;
         while (!expression.isEmpty()){
-            if (!TokenType.getType(expression.charAt(0)).equals(TokenType.getType(lastChar))) {
+            if (expression.charAt(0)==')' || expression.charAt(0)=='(' || !TokenType.getType(expression.charAt(0)).equals(TokenType.getType(lastChar))) {
+                if(lastChar!=')' && lastChar!='(' && TokenType.getType(lastChar)==Token.typeChar.NUMBER  && !tempString.contains(".")){
+                    tempString = Double.toString(Double.parseDouble(tempString));
+                }
                 Token temp = new Token(tempString, TokenType.getType(lastChar), null);
                 if (lookAhead != null) {
                     nextToken.next = temp;
@@ -26,12 +30,13 @@ public class Lexer {
             lastChar = expression.charAt(0);
             expression = expression.substring(1);
         }
-        Token temp = new Token(tempString, TokenType.getType(lastChar), null);
+//        }
+        tempToken = new Token(tempString, TokenType.getType(lastChar), null);
         if (lookAhead != null) {
-            nextToken.next = temp;
+            nextToken.next = tempToken;
         } else
-            lookAhead = temp;
-        nextToken = temp;
+            lookAhead = tempToken;
+        nextToken = tempToken;
         tempString = "";
     }
     public Token getLookAhead() {

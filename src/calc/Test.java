@@ -2,7 +2,7 @@ package calc;
 
 public class Test {
     public static void main(String[] args) {
-        String expression = "(2333-411*622331)/32323+4444";
+        String expression = "2+2-1*44*100+100";
         Calculator calc = new Calculator(expression);
     }
 }
