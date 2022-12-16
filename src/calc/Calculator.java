@@ -1,5 +1,8 @@
 package calc;
 
+import java.security.Key;
+import java.security.KeyPair;
+import java.util.HashMap;
 import java.util.Stack;
 
 import static calc.TokenType.typeChar.*;
@@ -11,7 +14,7 @@ public class Calculator {
     private Token head = null, tail = null;
 
     public Calculator(String current) {
-        System.out.println(calculating(reversePolishNotation(current)));
+        System.out.printf("%.2f%n",calculating(reversePolishNotation(current)));
     }
 
     private double calculating(Token notation) {
@@ -56,49 +59,49 @@ public class Calculator {
     private Token reversePolishNotation(String current) {
         Stack<Token.typeChar> symbol = new Stack<>();
         Lexer lexer = new Lexer(current);
+        HashMap<TokenType.typeChar, Integer> lvl = new HashMap<>();
+        lvl.put(NUMBER, 0);
+        lvl.put(PLUS, 2);
+        lvl.put(MINUS, 2);
+        lvl.put(DIVISION, 3);
+        lvl.put(MULTIPLIED, 3);
+        lvl.put(CLOSE, -1);
+        lvl.put(OPEN, 1);
         while (lexer.getLookAhead() != null) {
-//            System.out.println(lexer.getLookAhead().value +" "+lexer.getLookAhead().type);
-            switch (lexer.getLookAhead().type) {
-                case NUMBER:
+            switch (lvl.get(lexer.getLookAhead().type)) {
+                case 0:
                     setElement(new Token(lexer.getLookAhead().value, NUMBER, null));
                     break;
-                case PLUS, MINUS, OPEN:
-                    while (!symbol.empty()) {
-                        if (symbol.peek() == DIVISION || symbol.peek() == MULTIPLIED || symbol.peek() == PLUS || symbol.peek() == MINUS ) {
-                            setElement(new Token(null, symbol.pop(), null));
-                        } else
+                case 1:
+                    symbol.push(lexer.getLookAhead().type);
+                    break;
+                case -1:
+                    while (!symbol.empty()){
+                        if(symbol.peek()==OPEN){
+                            symbol.pop();
                             break;
+                        }
+                        setElement(new Token(null,symbol.pop(),null));
+                    }
+                    break;
+                default:
+                    while (!symbol.empty()) {
+                        if (lvl.get(symbol.peek()) >= lvl.get(lexer.getLookAhead().type)) {
+                            setElement(new Token(null, symbol.pop(), null));
+                        } else break;
                     }
                     symbol.push(lexer.getLookAhead().type);
                     break;
-                case DIVISION, MULTIPLIED:
-                    while (!symbol.empty()) {
-                        if (symbol.peek() == MULTIPLIED || symbol.peek() == DIVISION || symbol.peek()==CLOSE) {
-                            setElement(new Token(null, symbol.pop(), null));
-                        } else
-                            break;
-                    }
-                    symbol.push(lexer.getLookAhead().type);
-                    break;
-                case DEGREE:
-                    break;
-                case CLOSE:
-                    while (symbol.peek() != OPEN) {
-                        setElement(new Token(null, symbol.pop(), null));
-                    }
-                    symbol.pop();
-                    break;
-
             }
             lexer.shift();
         }
         while (!symbol.empty()) {
             setElement(new Token(null, symbol.pop(), null));
         }
-        while (head!=null){
-            System.out.println(head.value +" "+head.type);
-            head=head.next;
-        }
+//        while (head != null) {
+//            System.out.println(head.value + " " + head.type);
+//            head = head.next;
+//        }
         return head;
     }
 
