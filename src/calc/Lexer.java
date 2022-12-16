@@ -66,11 +66,6 @@ public class Lexer extends TokenType {
     public Token getLookAhead() {
         return lookAhead;
     }
-
-    public Token getNextToken() {
-        return lookAhead.next;
-    }
-
     public void shift() {
         lookAhead = lookAhead.next;
     }

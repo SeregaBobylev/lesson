@@ -8,9 +8,7 @@ import java.util.Stack;
 import static calc.TokenType.typeChar.*;
 
 
-public class Calculator {
-    private char[] current;
-    private Stack<Character> convertStack;
+public class Calculator extends TokenType{
     private Token head = null, tail = null;
 
     public Calculator(String current) {
@@ -57,9 +55,9 @@ public class Calculator {
     }
 
     private Token reversePolishNotation(String current) {
-        Stack<Token.typeChar> symbol = new Stack<>();
+        Stack<typeChar> symbol = new Stack<>();
         Lexer lexer = new Lexer(current);
-        HashMap<TokenType.typeChar, Integer> lvl = new HashMap<>();
+        HashMap<typeChar, Integer> lvl = new HashMap<>();
         lvl.put(NUMBER, 0);
         lvl.put(PLUS, 2);
         lvl.put(MINUS, 2);
@@ -98,10 +96,6 @@ public class Calculator {
         while (!symbol.empty()) {
             setElement(new Token(null, symbol.pop(), null));
         }
-//        while (head != null) {
-//            System.out.println(head.value + " " + head.type);
-//            head = head.next;
-//        }
         return head;
     }
 
