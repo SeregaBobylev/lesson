@@ -2,7 +2,9 @@ package calc;
 
 import javax.swing.*;
 
-public class Lexer extends TokenType{
+import static calc.TokenType.typeChar.NUMBER;
+
+public class Lexer extends TokenType {
     private final String current;
     private Token nextToken; // tail
 
@@ -10,47 +12,58 @@ public class Lexer extends TokenType{
 
     public Lexer(String expression) {
         current = expression;
-        char lastChar= expression.charAt(0);
-        String tempString="";
+        char lastChar = expression.charAt(0);
+        String numberString = "";
         Token tempToken;
-        while (!expression.isEmpty()){
-            if (getType(lastChar)!= Token.typeChar.NUMBER) {
-                Token temp = new Token(tempString, TokenType.getType(lastChar), null);
+        while (true) {
+            if (getType(lastChar) != NUMBER) {
+                numberString = lastChar + "";
+                tempToken = new Token(numberString, TokenType.getType(lastChar), null);
                 if (lookAhead != null) {
-                    nextToken.next = temp;
+                    nextToken.next = tempToken;
                 } else
-                    lookAhead = temp;
-                nextToken = temp;
-                tempString = "";
-            }
-            if(getType(expression.charAt(0))==typeChar.NUMBER)
-            tempString += expression.charAt(0);
-            else {
-                if(!tempString.contains(".")){
-                    tempString=Double.toString(Double.parseDouble(tempString));
+                    lookAhead = tempToken;
+                nextToken = tempToken;
+                numberString = "";
+            } else {
+                numberString += lastChar;
+                if (getType(expression.charAt(0)) != NUMBER) {
+//                    code in .
+                    numberString = Double.toString(Double.parseDouble(numberString));
+                    tempToken = new Token(numberString, NUMBER, null);
+                    if (lookAhead != null) {
+                        nextToken.next = tempToken;
+                    } else
+                        lookAhead = tempToken;
+                    nextToken = tempToken;
+                    numberString = "";
                 }
-                Token temp = new Token(tempString, TokenType.getType(lastChar), null);
-                if (lookAhead != null) {
-                    nextToken.next = temp;
-                } else
-                    lookAhead = temp;
-                nextToken = temp;
-                tempString = "";
             }
             lastChar = expression.charAt(0);
             expression = expression.substring(1);
-            if(expression.isEmpty()) {
-                if(!tempString.contains(".")){
-                    tempString=Double.toString(Double.parseDouble(tempString));
+            if (expression.isEmpty()) {
+                if (getType(lastChar) != NUMBER) {
+                    numberString = lastChar + "";
+                    tempToken = new Token(numberString, TokenType.getType(lastChar), null);
+                    if (lookAhead != null) {
+                        nextToken.next = tempToken;
+                    } else
+                        lookAhead = tempToken;
+                    nextToken = tempToken;
+                } else {
+                    if (!numberString.isEmpty())
+                        numberString += lastChar;
+                    else numberString = lastChar + "";
+                    numberString = Double.toString(Double.parseDouble(numberString));
+                    tempToken = new Token(numberString, NUMBER, null);
+                    if (lookAhead != null) {
+                        nextToken.next = tempToken;
+                    } else
+                        lookAhead = tempToken;
+                    nextToken = tempToken;
                 }
-                Token temp = new Token(tempString,typeChar.NUMBER, null);
-                if (lookAhead != null) {
-                    nextToken.next = temp;
-                } else
-                    lookAhead = temp;
-                nextToken = temp;
-                tempString = "";
-                break;}
+                break;
+            }
         }
 //        }
 //        tempToken = new Token(tempString, TokenType.getType(lastChar), null);
@@ -61,13 +74,16 @@ public class Lexer extends TokenType{
 //        nextToken = tempToken;
 //        tempString = "";
     }
+
     public Token getLookAhead() {
         return lookAhead;
     }
+
     public Token getNextToken() {
         return lookAhead.next;
     }
-    public void shift(){
+
+    public void shift() {
         lookAhead = lookAhead.next;
     }
 }

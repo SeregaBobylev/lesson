@@ -18,6 +18,7 @@ public class Calculator {
         Stack<Token> tempStack = new Stack<>();
         double number1, number2;
         while (notation != null) {
+//            System.out.println(notation.value);
             switch (notation.type) {
                 case NUMBER:
                     tempStack.push(new Token(notation.value, NUMBER, null));
@@ -39,7 +40,7 @@ public class Calculator {
                 case DIVISION:
                     number1 = Double.parseDouble(tempStack.pop().value);
                     number2 = Double.parseDouble(tempStack.pop().value);
-                    tempStack.push(new Token(Double.toString(number1 / number2), NUMBER, null));
+                    tempStack.push(new Token(Double.toString(number2 / number1), NUMBER, null));
                     break;
                 case MULTIPLIED:
                     number1 = Double.parseDouble(tempStack.pop().value);
@@ -56,13 +57,14 @@ public class Calculator {
         Stack<Token.typeChar> symbol = new Stack<>();
         Lexer lexer = new Lexer(current);
         while (lexer.getLookAhead() != null) {
+//            System.out.println(lexer.getLookAhead().value +" "+lexer.getLookAhead().type);
             switch (lexer.getLookAhead().type) {
                 case NUMBER:
                     setElement(new Token(lexer.getLookAhead().value, NUMBER, null));
                     break;
                 case PLUS, MINUS, OPEN:
                     while (!symbol.empty()) {
-                        if (symbol.peek() == DIVISION || symbol.peek() == MULTIPLIED) {
+                        if (symbol.peek() == DIVISION || symbol.peek() == MULTIPLIED || symbol.peek() == PLUS || symbol.peek() == MINUS ) {
                             setElement(new Token(null, symbol.pop(), null));
                         } else
                             break;
@@ -71,7 +73,7 @@ public class Calculator {
                     break;
                 case DIVISION, MULTIPLIED:
                     while (!symbol.empty()) {
-                        if (symbol.peek() == lexer.getLookAhead().type) {
+                        if (symbol.peek() == MULTIPLIED || symbol.peek() == DIVISION || symbol.peek()==CLOSE) {
                             setElement(new Token(null, symbol.pop(), null));
                         } else
                             break;
@@ -94,7 +96,7 @@ public class Calculator {
             setElement(new Token(null, symbol.pop(), null));
         }
         while (head!=null){
-            System.out.println(head.value);
+            System.out.println(head.value +" "+head.type);
             head=head.next;
         }
         return head;
