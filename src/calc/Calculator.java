@@ -10,11 +10,9 @@ import static calc.TokenType.typeChar.*;
 
 public class Calculator extends TokenType{
     private Token head = null, tail = null;
-
     public Calculator(String current) {
         System.out.printf("%.2f%n",calculating(reversePolishNotation(current)));
     }
-
     private double calculating(Token notation) {
         Stack<Token> tempStack = new Stack<>();
         double number1, number2;
