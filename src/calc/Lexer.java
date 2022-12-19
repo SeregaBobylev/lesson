@@ -3,34 +3,39 @@ package calc;
 import static calc.Type.*;
 //import static calc.Type.NUMBER;
 
-public class Lexer{
+public class Lexer {
     private int pos;
-    private int shiftLast=0;
+    private int shiftLast = 0;
     private final String expression;
+    private final int length;
 
     public Lexer(String expression) {
         this.expression = expression;
+        this.length = expression.length();
     }
+
     public Token getLookAhead() {
         pos = shiftLast;
-        int length =expression.length();
-        if(pos==24) System.out.println(pos);
-        if(length<pos) return new Token(null,END);
-        String tempString="";
-        Token token = new Token(expression.charAt(pos)+"");
-        if(token.type==NUMBER){
-            while (length>pos){
-                Token tempToken = new Token(expression.charAt(pos)+"");
-                if(tempToken.type!=NUMBER) break;
-                tempString+=tempToken.value;
+        if (length <= pos) return new Token("end", END);
+        String tempString = "";
+        Token token = new Token(expression.charAt(pos) + "");
+        if (token.type == NUMBER) {
+            Token temp = token;
+            while (temp.type == NUMBER) {
+                tempString += temp.value;
                 pos++;
+                if (pos == length) break;
+                temp = new Token(expression.charAt(pos) + "");
             }
-           token  = new Token(tempString,NUMBER);
-        }else
-        pos++;
+            if (!tempString.contains("."))
+                tempString = Double.toString(Double.parseDouble(tempString));
+            token = new Token(tempString, NUMBER);
+        } else
+            pos++;
         return token;
     }
-    public void shift(){
-        shiftLast=pos;
+
+    public void shift() {
+        shiftLast = pos;
     }
 }

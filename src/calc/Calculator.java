@@ -8,19 +8,20 @@ import java.util.Stack;
 import static calc.Type.*;
 
 
-public class Calculator{
+public class Calculator {
     private Token head = null, tail = null;
+
     public Calculator(String current) {
-        System.out.printf("%.2f%n",calculating(reversePolishNotation(current)));
+        System.out.printf("%.2f%n", calculating(reversePolishNotation(current)));
     }
+
     private double calculating(Token notation) {
         Stack<Token> tempStack = new Stack<>();
         double number1, number2;
-        while (notation != null) {
-            if(notation.type==END) break;
+        while (notation.type != END) {
             switch (notation.type) {
                 case NUMBER:
-                    tempStack.push(new Token(notation.value, NUMBER));
+                    tempStack.push(notation);
                     break;
                 case PLUS:
                     number1 = Double.parseDouble(tempStack.pop().value);
@@ -45,6 +46,7 @@ public class Calculator{
                     tempStack.push(new Token(Double.toString(number1 * number2), NUMBER));
                     break;
             }
+            notation = notation.next;
         }
         return Double.parseDouble(tempStack.pop().value);
     }
@@ -54,28 +56,28 @@ public class Calculator{
         Lexer lexer = new Lexer(current);
         HashMap<Type, Integer> lvl = new HashMap<>();
         lvl.put(NUMBER, 0);
+        lvl.put(DEGREE, 4);
         lvl.put(PLUS, 2);
         lvl.put(MINUS, 2);
         lvl.put(DIVISION, 3);
         lvl.put(MULTIPLIED, 3);
         lvl.put(CLOSE, -1);
         lvl.put(OPEN, 1);
-        while (lexer.getLookAhead().type!=END) {
-            System.out.println(lexer.getLookAhead().value);
-            switch (lvl.get(lexer.getLookAhead().type)) {
-                case 0:
+        while (lexer.getLookAhead().type != END) {
+            switch (lexer.getLookAhead().type) {
+                case NUMBER:
                     setElement(new Token(lexer.getLookAhead().value, NUMBER));
                     break;
-                case 1:
+                case OPEN:
                     symbol.push(lexer.getLookAhead().type);
                     break;
-                case -1:
-                    while (!symbol.empty()){
-                        if(symbol.peek()==OPEN){
+                case CLOSE:
+                    while (!symbol.empty()) {
+                        if (symbol.peek() == OPEN) {
                             symbol.pop();
                             break;
                         }
-                        setElement(new Token(null,symbol.pop()));
+                        setElement(new Token(null, symbol.pop()));
                     }
                     break;
                 default:
@@ -89,8 +91,10 @@ public class Calculator{
             }
             lexer.shift();
         }
+
         while (!symbol.empty())
             setElement(new Token(null, symbol.pop()));
+        setElement(new Token(null, END));
         return head;
     }
 
