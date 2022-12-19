@@ -8,5 +8,6 @@ public enum Type {
     CLOSE,
     DIVISION,
     MULTIPLIED,
-    DEGREE
+    DEGREE,
+    END
 }
